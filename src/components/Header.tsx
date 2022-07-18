@@ -1,44 +1,77 @@
 import { observer } from 'mobx-react-lite';
-import React, { useContext } from 'react'
-import { Button, Header, Navbar, Nav } from 'rsuite';
-import { Context, State } from '../context'
-
+import React, { FC, ReactNode, useContext } from 'react';
+import { Button, Header, Dropdown, IconButton, Toggle } from 'rsuite';
+import { Context, State } from '../context';
+import MenuIcon from '@rsuite/icons/Menu';
 type HeaderProps = {
-    isTheme: boolean,
-    setTheme: React.Dispatch<React.SetStateAction<boolean>>,
-}
+  isTheme: boolean;
+  setTheme: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-const HeaderComponent: React.FC<HeaderProps> = ({ isTheme, setTheme }) => {
-    const { store } = useContext<State>(Context);
+type DropdownStyledItemProps = {
+  children: ReactNode;
+};
 
-    const handleTheme = () => {
-        setTheme(!isTheme)
-        localStorage.setItem('theme', `${!isTheme ? 'true' : ''}`)
-    }
+const DropdownStyledItem: FC<DropdownStyledItemProps> = ({ children }) => {
+  return (
+    <Dropdown.Item
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+      {children}
+    </Dropdown.Item>
+  );
+};
 
-    const handleLogout = () => {
-        store.logout()
-    };
-    return (
-        <Header>
-            <Navbar appearance="inverse">
+const HeaderComponent: FC<HeaderProps> = ({ isTheme, setTheme }) => {
+  const { store } = useContext<State>(Context);
 
-                <Button
-                    appearance='primary'
-                    onClick={() => handleTheme()}
-                    color='yellow'
-                    style={{ margin: '10px 20px' }}
-                >
-                    Switch theme
-                </Button>
-                {store.isAuth &&
-                    <Nav pullRight>
-                        <Button onClick={handleLogout} color="red" appearance="primary" style={{ margin: '10px 20px' }}>Logout</Button>
-                    </Nav>
-                }
-            </Navbar>
-        </Header>
-    )
-}
+  const handleTheme = () => {
+    setTheme(!isTheme);
+    localStorage.setItem('theme', `${!isTheme ? 'true' : ''}`);
+  };
 
-export default observer(HeaderComponent)
+  const handleLogout = () => {
+    store.logout();
+  };
+  return (
+    <Header style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+      <Dropdown
+        placement={'bottomEnd'}
+        trigger={'click'}
+        renderToggle={(props: any, ref: any) => (
+          <IconButton
+            {...props}
+            ref={ref}
+            style={{ backgroundColor: 'inherit' }}
+            icon={<MenuIcon color={!isTheme ? 'white' : 'black'} style={{ fontSize: 24 }} />}
+            circle
+            appearance="primary"
+          />
+        )}>
+        <DropdownStyledItem>
+          <Toggle
+            onChange={handleTheme}
+            size="lg"
+            checkedChildren="Switch theme"
+            unCheckedChildren="Switch theme"
+          />
+        </DropdownStyledItem>
+
+        <DropdownStyledItem>
+          {store?.isAuth ? (
+            <Button onClick={handleLogout} color="red" appearance="primary">
+              Logout
+            </Button>
+          ) : (
+            <p>Авторизируйтесь</p>
+          )}
+        </DropdownStyledItem>
+      </Dropdown>
+    </Header>
+  );
+};
+
+export default observer(HeaderComponent);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { Form, InputGroup } from 'rsuite';
 import VisibleIcon from '@rsuite/icons/Visible';
 import UnvisibleIcon from '@rsuite/icons/Unvisible';
@@ -13,7 +13,7 @@ interface TextFieldProps {
     'aria-label': string;
 }
 
-const TextField = React.forwardRef<HTMLDivElement, TextFieldProps>((props, ref) => {
+const TextField = forwardRef<HTMLDivElement, TextFieldProps>((props, ref) => {
     const { name, type, isPassword, accepter } = props;
     const [isVisible, setIsVisible] = useState<boolean>(false);
     return (

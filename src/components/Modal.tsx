@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC, useState } from 'react'
 import { Button, Modal } from 'rsuite';
 
 type ModalComponentProps = {
@@ -8,9 +8,9 @@ type ModalComponentProps = {
     name: string,
 }
 
-const ModalComponent: React.FC<ModalComponentProps> = ({ onClickButton, children, title, name }) => {
-    const [open, setOpen] = React.useState(false);
-    const [size, setSize] = React.useState();
+const ModalComponent: FC<ModalComponentProps> = ({ onClickButton, children, title, name }) => {
+    const [open, setOpen] = useState(false);
+    const [size, setSize] = useState();
     const handleOpen = (value: any) => {
         setSize(value);
         setOpen(true);

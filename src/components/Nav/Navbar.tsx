@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { Sidebar, Sidenav, Nav } from 'rsuite'
 import NavToggle from './NavToggle';
 import GearIcon from '@rsuite/icons/Gear';
@@ -7,9 +7,12 @@ import ToolsIcon from '@rsuite/icons/Tools';
 import DashboardIcon from '@rsuite/icons/Dashboard';
 import PeoplesIcon from '@rsuite/icons/Peoples';
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const NavbarComponent: FC = () => {
-    const [expand, setExpand] = React.useState(true);
+    const [expand, setExpand] = useState(true);
+    const navigate = useNavigate();
+
     return (
         <div className="show-fake-browser sidebar-page">
             <Sidebar
@@ -17,6 +20,7 @@ const NavbarComponent: FC = () => {
                 width={expand ? 260 : 56}
                 collapsible
             >
+
                 <Sidenav.Header>
                     <div style={{
                         padding: 18,
@@ -31,15 +35,19 @@ const NavbarComponent: FC = () => {
                         <span style={{ marginLeft: 12 }}> Gladiators Game</span>
                     </div>
                 </Sidenav.Header>
+
                 <Sidenav expanded={expand} appearance="subtle">
                     <Sidenav.Body>
                         <Nav>
+
                             <Nav.Item eventKey="1" icon={<DashboardIcon />}>
                                 Dashboard
                             </Nav.Item>
-                            <Nav.Item eventKey="2" icon={<PeoplesIcon />}>
-                                <Link to='/profile'>Profile</Link>
+
+                            <Nav.Item onClick={() => navigate('/profile')} eventKey="2" icon={<PeoplesIcon />}>
+                                Profile
                             </Nav.Item>
+
                             <Nav.Menu
                                 eventKey="3"
                                 trigger="hover"
@@ -53,6 +61,7 @@ const NavbarComponent: FC = () => {
                                 <Nav.Item eventKey="3-4">Loyalty</Nav.Item>
                                 <Nav.Item eventKey="3-5">Visit Depth</Nav.Item>
                             </Nav.Menu>
+
                             <Nav.Menu
                                 eventKey="4"
                                 trigger="hover"
@@ -66,9 +75,11 @@ const NavbarComponent: FC = () => {
                                 <Nav.Item eventKey="4-4">Tags</Nav.Item>
                                 <Nav.Item eventKey="4-5">Versions</Nav.Item>
                             </Nav.Menu>
+
                         </Nav>
                     </Sidenav.Body>
                 </Sidenav>
+
                 <NavToggle expand={expand} onChange={setExpand} />
             </Sidebar>
 
